@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>He-Man Game</title>
+    <style>
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background: url('background.png') no-repeat center center;
+            background-size: cover;
+        }
+        body {
+            text-align: center;
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        #gameOverMessage {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 2px solid white;
+            display: none;
+        }
+        #giveUpButton {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #resetButton {
+            background-color: green;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        #exitButton {
+            background-color: darkred;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dumbass-Man VS Big-Ass Bear!</h1>
+    <p>Use Left/Right keys to move He-Man. Press Space to throw the sword!</p>
+    <p>Game lasts 5 minutes. Avoid the lightning!</p>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <p id="score">Score: 0</p>
+    <p id="time">Time: 300</p>
+    <button id="giveUpButton">Give Up</button>
+    <div id="gameOverMessage">
+        <p id="finalScore">Final Score: 0</p>
+        <button id="resetButton">Play Again</button>
+        <button id="exitButton">Exit Game</button>
+    </div>
+
+    <!-- Audio -->
+    <audio id="hitSound" src="growl.mp3"></audio>
+    <audio id="heman1" src="heman1.mp3"></audio>
+    <audio id="heman2" src="heman2.mp3"></audio>
+    <audio id="heman3" src="heman3.mp3"></audio>
+    <audio id="heman4" src="heman4.mp3"></audio> 
+    <audio id="backgroundMusic" src="background.mp3" loop></audio>
+    <!-- You Died Image -->
+    <img id="youDiedImage" src="youDied.png" style="display:none;">
+
+    <script>
+        const giveUpButton = document.getElementById('giveUpButton');
+        const resetButton = document.getElementById('resetButton');
+        const exitButton = document.getElementById('exitButton');
+        const gameOverMessage = document.getElementById('gameOverMessage');
+        const finalScoreDisplay = document.getElementById('finalScore');
+
+        // When the player gives up
+        giveUpButton.addEventListener('click', () => {
+            endGame();
+        });
+
+        // Reset the game
+        resetButton.addEventListener('click', () => {
+            resetGame();
+        });
+
+        // Exit the game (This won't close the window but can navigate away)
+        exitButton.addEventListener('click', () => {
+            window.location.href = 'https://example.com'; // Redirect to another page
+        });
+
+        // Function to end the game (triggered when player gives up or loses)
+        function endGame() {
+            gameEnded = true; // This stops the game loop
+            backgroundMusic.pause(); // Stop background music
+            finalScoreDisplay.textContent = `Final Score: ${score}`;
+            gameOverMessage.style.display = 'block'; // Show game over screen
+        }
+
+        // Reset the game
+        function resetGame() {
+            gameEnded = false;
+            score = 0;
+            startTime = Date.now();
+            swordThrown = false;
+            sword.active = false;
+            lightningBolt = null; // Reset lightning bolt
+            firstSwordThrown = false;
+            heman.x = canvas.width / 2 - 50; // Reset He-Man position
+            bear.x = Math.random() * (canvas.width - bear.width); // Reset Bear position
+            gameOverMessage.style.display = 'none'; // Hide the game over screen
+            startGame(); // Restart the game
+        }
+    </script>
+
+    <script src="game.js"></script>
+</body>
+</html>
